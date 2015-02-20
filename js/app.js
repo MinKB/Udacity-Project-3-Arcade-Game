@@ -1,5 +1,4 @@
 //Initialize global variables
-
 //Global variables for player position
 var counterX = 200;
 var counterY = 395;
@@ -14,6 +13,18 @@ var lives = 6;
 //Specifies inital score
 var score = 0;
 
+//reset function for when player dies or gets key
+function reset() {
+    counterX = 200;
+    counterY = 395;
+    lives = lives - 1;
+    var lifeSpanElement = document.getElementById("lives");
+    lifeSpanElement.innerHTML = lives;
+    if (lives === 0) {
+        document.write("<h1>Game Over</h1><h3>Refresh to play again</h3>");
+    }
+}
+
 // Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
@@ -24,7 +35,7 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
     this.x = -100;
     this.y = possibleY[Math.floor(Math.random() * possibleY.length)];
-}
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -36,7 +47,7 @@ Enemy.prototype.update = function(dt) {
     //collision engine
     if (this.x - counterX < 50 && this.x - counterX > 0 && this.y === counterY) {
         reset()
-    }
+    };
     //resets enemys at start after reaching end of board
     if (this.x > 505) {
         this.x = -100
@@ -47,7 +58,7 @@ Enemy.prototype.update = function(dt) {
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -57,7 +68,7 @@ var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = counterX;
     this.y = counterY;
-}
+};
 
 Player.prototype.update = function(dt) {
     this.x = counterX;
@@ -65,7 +76,7 @@ Player.prototype.update = function(dt) {
 
     if (counterX === key.x && counterY === key.y) {
         foundKey();
-    } 
+    }
 }
 
 Player.prototype.render = function() {
@@ -104,7 +115,7 @@ Player.prototype.handleInput = function(key) {
                 reset();
             }
             else {
-                counterX += 100;              
+                counterX += 100; 
             }
             
             break;
@@ -117,21 +128,10 @@ var Key = function() {
     this.y = possibleY[Math.floor(Math.random() * possibleY.length)];
     keyX = this.x;
     keyY = this.y;
-}
+};
 
 Key.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
-
-function reset() {
-    counterX = 200;
-    counterY = 395;
-    lives = lives - 1;
-    var lifeSpanElement = document.getElementById("lives");
-    lifeSpanElement.innerHTML = lives;
-    if (lives === 0) {
-        document.write("<h1>Game Over</h1><h3>Refresh to play again</h3>");
-    }
 }
 
 function foundKey() {
